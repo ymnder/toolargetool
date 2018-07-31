@@ -5,11 +5,10 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -147,20 +146,89 @@ public final class TooLargeTool {
      * Start logging information about all of the state saved by Activities and Fragments. Logs are
      * written at {@link Log#DEBUG DEBUG} priority with the default tag: "TooLargeTool".
      *
-     * @param application to log
+     * @param application for register activity lifecycle to log
      */
-    public static void startLogging(Application application) {
-        startLogging(application, Log.DEBUG, "TooLargeTool");
+    public static void startLogging(@NonNull Application application) {
+        startLogging(application, new LoggingParam.Builder().build());
     }
 
     /**
      * Start logging information about all of the state saved by Activities and Fragments.
      *
-     * @param application to log
-     * @param priority to write log messages at
-     * @param tag for log messages
+     * @param application for register activity lifecycle to log
+     * @param param for logging params
      */
-    public static void startLogging(Application application, int priority, @NonNull String tag) {
-        application.registerActivityLifecycleCallbacks(new ActivitySavedStateLogger(priority, tag, true));
+    public static void startLogging(@NonNull Application application, @NonNull LoggingParam param) {
+        application.registerActivityLifecycleCallbacks(new ActivitySavedStateLogger(param.loggerActivityCallback, param.loggerFragmentCallback));
+    }
+
+    public final static class LoggingParam {
+        @NonNull
+        private final TooLargeLoggerCallback loggerActivityCallback;
+        @Nullable
+        private final TooLargeLoggerCallback loggerFragmentCallback;
+
+        public LoggingParam(Builder builder) {
+            this.loggerActivityCallback = builder.loggerActivityCallback;
+            this.loggerFragmentCallback = builder.loggerFragmentCallback;
+        }
+
+        public static class Builder {
+            private int priority = Log.DEBUG;
+            @NonNull
+            private String tag = "TooLargeTool";
+            @NonNull
+            private TooLargeLoggerCallback loggerActivityCallback = new TooLargeLoggerCallback() {
+                @Override
+                public void log(@NonNull String msg) {
+                    Log.println(priority, tag, msg);
+                }
+            };
+            @Nullable
+            private TooLargeLoggerCallback loggerFragmentCallback = new TooLargeLoggerCallback() {
+                @Override
+                public void log(@NonNull String msg) {
+                    Log.println(priority, tag, msg);
+                }
+            };
+
+            /**
+             * Set priority to write log message
+             * this value is ignored if set callback
+             */
+            public Builder priority(int priority) {
+                this.priority = priority;
+                return this;
+            }
+
+            /**
+             * Set tag for log messages
+             * this value is ignored if set callback
+             */
+            public Builder tag(@NonNull String tag) {
+                this.tag = tag;
+                return this;
+            }
+
+            /**
+             * Set loggerActivityCallback to call on {@link android.os.TransactionTooLargeException}
+             */
+            public Builder loggerActivityCallback(@NonNull TooLargeLoggerCallback loggerActivityCallback) {
+                this.loggerActivityCallback = loggerActivityCallback;
+                return this;
+            }
+
+            /**
+             * Set loggerFragmentCallback to call on {@link android.os.TransactionTooLargeException}
+             */
+            public Builder loggerFragmentCallback(@Nullable TooLargeLoggerCallback loggerFragmentCallback) {
+                this.loggerFragmentCallback = loggerFragmentCallback;
+                return this;
+            }
+
+            public LoggingParam build() {
+                return new LoggingParam(this);
+            }
+        }
     }
 }
