@@ -1,7 +1,6 @@
 package com.gu.toolargetool;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,23 +10,18 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 /**
- * {@link android.support.v4.app.FragmentManager.FragmentLifecycleCallbacks} implementation that
+ * {@link androidx.fragment.app.FragmentManager.FragmentLifecycleCallbacks} implementation that
  * logs information about the saved state of Fragments.
  */
 public class FragmentSavedStateLogger extends FragmentManager.FragmentLifecycleCallbacks {
 
-    private final int priority;
     @NonNull
-    private final String tag;
-    @NonNull private final Map<Fragment, Bundle> savedStates = new HashMap<>();
+    private final TooLargeLoggerCallback fragmentCallback;
+    @NonNull
+    private final Map<Fragment, Bundle> savedStates = new HashMap<>();
 
-    public FragmentSavedStateLogger(int priority, @NonNull String tag) {
-        this.priority = priority;
-        this.tag = tag;
-    }
-
-    private void log(String msg) {
-        Log.println(priority, tag, msg);
+    FragmentSavedStateLogger(@NonNull TooLargeLoggerCallback fragmentCallback) {
+        this.fragmentCallback = fragmentCallback;
     }
 
     @Override
@@ -43,7 +37,7 @@ public class FragmentSavedStateLogger extends FragmentManager.FragmentLifecycleC
             if (f.getArguments() != null) {
                 message += "\n* fragment arguments = " + TooLargeTool.bundleBreakdown(f.getArguments());
             }
-            log(message);
+            fragmentCallback.log(message);
         }
     }
 }
