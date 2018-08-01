@@ -1,5 +1,7 @@
 package com.gu.toolargetool
 
+import android.util.Log
+
 data class LoggerParam(
         val activityCallback: ActivityCallback,
         val fragmentCallback: FragmentCallback?
@@ -30,10 +32,10 @@ data class LoggerParam(
 
         init {
             activityCallback = ActivityCallback { activity, bundle ->
-                //TODO
+                Log.d("TooLargeTool", format(activity, bundle))
             }
             fragmentCallback = FragmentCallback { fm, f, bundle ->
-                //TODO
+                Log.d("TooLargeTool", format(fm, f, bundle))
             }
         }
 
