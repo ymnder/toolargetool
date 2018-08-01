@@ -38,10 +38,8 @@ internal class ActivitySavedStateLogger(
     }
 
     override fun onActivityStopped(activity: Activity) {
-
         val savedState = savedStates.remove(activity)
         savedState?.let {
-            //activityCallback.callback("${activity.javaClass.simpleName}.onSaveInstanceState wrote: ${it.bundleBreakdown()}")
             activityCallback.callback(activity, it)
         }
     }

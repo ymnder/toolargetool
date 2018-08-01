@@ -1,9 +1,22 @@
 package com.gu.toolargetool
 
+import android.app.Activity
 import android.os.Bundle
 import android.os.Parcel
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import java.util.*
 
+fun format(activity: Activity, bundle: Bundle) =
+        "${activity.javaClass.simpleName}.onSaveInstanceState wrote: ${bundle.bundleBreakdown()}"
+
+fun format(fm: FragmentManager, fragment: Fragment, bundle: Bundle): String {
+    var message = "${fragment.javaClass.simpleName}.onSaveInstanceState wrote: ${bundle.bundleBreakdown()}"
+    fragment.arguments?.let {
+        message += "\n* fragment arguments = ${it.bundleBreakdown()}"
+    }
+    return message
+}
 
 /**
  * Return a formatted String containing a breakdown of the contents of a [Bundle].
@@ -15,13 +28,16 @@ fun Bundle.bundleBreakdown(): String {
     var result = String.format(
             Locale.UK,
             "Bundle@%d contains %d keys and measures %,.1f KB when serialized as a Parcel",
-            System.identityHashCode(this), this.size(), this.sizeAsParcel().kb()
+            System.identityHashCode(this),
+            this.size(),
+            this.sizeAsParcel().kb()
     )
     for ((key, value) in this.valueSizes()) {
         result += String.format(
                 Locale.UK,
                 "\n* %s = %,.1f KB",
-                key, value.kb()
+                key,
+                value.kb()
         )
     }
     return result
