@@ -9,7 +9,9 @@ import java.util.*
  * [androidx.fragment.app.FragmentManager.FragmentLifecycleCallbacks] implementation that
  * logs information about the saved state of Fragments.
  */
-class FragmentSavedStateLogger internal constructor(private val fragmentCallback: TooLargeLoggerCallback) : FragmentManager.FragmentLifecycleCallbacks() {
+internal class FragmentSavedStateLogger(
+        private val fragmentCallback: FragmentCallback
+) : FragmentManager.FragmentLifecycleCallbacks() {
     private val savedStates = HashMap<Fragment, Bundle>()
 
     override fun onFragmentSaveInstanceState(fm: FragmentManager, f: Fragment, outState: Bundle) {
@@ -19,11 +21,11 @@ class FragmentSavedStateLogger internal constructor(private val fragmentCallback
     override fun onFragmentStopped(fm: FragmentManager, f: Fragment) {
         val savedState = savedStates.remove(f)
         if (savedState != null) {
-            var message = "${f.javaClass.simpleName}.onSaveInstanceState wrote: ${savedState.bundleBreakdown()}"
-            f.arguments?.let {
-                message += "\n* fragment arguments = ${it.bundleBreakdown()}"
-            }
-            fragmentCallback.log(message)
+//            var message = "${f.javaClass.simpleName}.onSaveInstanceState wrote: ${savedState.bundleBreakdown()}"
+//            f.arguments?.let {
+//                message += "\n* fragment arguments = ${it.bundleBreakdown()}"
+//            }
+            fragmentCallback.callback(fm, f, savedState)
         }
     }
 }

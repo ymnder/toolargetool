@@ -10,7 +10,10 @@ import java.util.*
  * [android.app.Application.ActivityLifecycleCallbacks] implementation that logs information
  * about the saved state of Activities.
  */
-class ActivitySavedStateLogger internal constructor(private val activityCallback: TooLargeLoggerCallback, fragmentCallback: TooLargeLoggerCallback?) : Application.ActivityLifecycleCallbacks {
+internal class ActivitySavedStateLogger(
+        private val activityCallback: ActivityCallback,
+        fragmentCallback: FragmentCallback?
+) : Application.ActivityLifecycleCallbacks {
 
     private val fragmentLogger: FragmentSavedStateLogger? = if (fragmentCallback != null) FragmentSavedStateLogger(fragmentCallback) else null
     private val savedStates = HashMap<Activity, Bundle>()
@@ -35,9 +38,11 @@ class ActivitySavedStateLogger internal constructor(private val activityCallback
     }
 
     override fun onActivityStopped(activity: Activity) {
+
         val savedState = savedStates.remove(activity)
         savedState?.let {
-            activityCallback.log("${activity.javaClass.simpleName}.onSaveInstanceState wrote: ${it.bundleBreakdown()}")
+            //activityCallback.callback("${activity.javaClass.simpleName}.onSaveInstanceState wrote: ${it.bundleBreakdown()}")
+            activityCallback.callback(activity, it)
         }
     }
 

@@ -1,24 +1,25 @@
 package com.gu.toolargetool
 
 data class LoggerParam(
-        val activityCallback: TooLargeLoggerCallback,
-        val fragmentCallback: TooLargeLoggerCallback?
+        val activityCallback: ActivityCallback,
+        val fragmentCallback: FragmentCallback?
 ) {
     class Builder {
-        private var activityCallback: TooLargeLoggerCallback
+        private var activityCallback: ActivityCallback
 
-        private var fragmentCallback: TooLargeLoggerCallback?
+        private var fragmentCallback: FragmentCallback?
 
         /**
-         * Set activityCallback to call on {@link android.os.TransactionTooLargeException}
+         * Set activityCallback to call on [android.os.TransactionTooLargeException]
          */
-        fun activityCallback(callback: TooLargeLoggerCallback) = apply {
+        fun activityCallback(callback: ActivityCallback) = apply {
             this.activityCallback = callback
         }
+
         /**
-         * Set fragmentCallback to call on {@link android.os.TransactionTooLargeException}
+         * Set fragmentCallback to call on [android.os.TransactionTooLargeException]
          */
-        fun fragmentCallback(callback: TooLargeLoggerCallback?) = apply {
+        fun fragmentCallback(callback: FragmentCallback?) = apply {
             this.fragmentCallback = callback
         }
 
@@ -28,10 +29,10 @@ data class LoggerParam(
         )
 
         init {
-            activityCallback = TooLargeLoggerCallback {
+            activityCallback = ActivityCallback { activity, bundle ->
                 //TODO
             }
-            fragmentCallback = TooLargeLoggerCallback {
+            fragmentCallback = FragmentCallback { fm, f, bundle ->
                 //TODO
             }
         }
