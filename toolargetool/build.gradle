@@ -25,6 +25,7 @@ dependencies {
     })
     implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.assertj:assertj-core:3.10.0'
 }
 
 //FIXME this process does not work on gradle plugin3+
