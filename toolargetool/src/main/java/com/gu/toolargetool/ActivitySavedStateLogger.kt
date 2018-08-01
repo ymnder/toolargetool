@@ -18,16 +18,14 @@ class ActivitySavedStateLogger internal constructor(private val activityCallback
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle) {
         if (activity is FragmentActivity && fragmentLogger != null) {
-            activity
-                    .supportFragmentManager
+            activity.supportFragmentManager
                     .registerFragmentLifecycleCallbacks(fragmentLogger, true)
         }
     }
 
     override fun onActivityDestroyed(activity: Activity) {
         if (activity is FragmentActivity && fragmentLogger != null) {
-            activity
-                    .supportFragmentManager
+            activity.supportFragmentManager
                     .unregisterFragmentLifecycleCallbacks(fragmentLogger)
         }
     }
@@ -38,8 +36,8 @@ class ActivitySavedStateLogger internal constructor(private val activityCallback
 
     override fun onActivityStopped(activity: Activity) {
         val savedState = savedStates.remove(activity)
-        if (savedState != null) {
-            activityCallback.log(activity.javaClass.simpleName + ".onSaveInstanceState wrote: " + LoggingHelper().bundleBreakdown(savedState))
+        savedState?.let {
+            activityCallback.log("${activity.javaClass.simpleName}.onSaveInstanceState wrote: ${it.bundleBreakdown()}")
         }
     }
 

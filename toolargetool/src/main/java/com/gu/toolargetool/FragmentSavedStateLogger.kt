@@ -19,9 +19,9 @@ class FragmentSavedStateLogger internal constructor(private val fragmentCallback
     override fun onFragmentStopped(fm: FragmentManager, f: Fragment) {
         val savedState = savedStates.remove(f)
         if (savedState != null) {
-            var message = f.javaClass.simpleName + ".onSaveInstanceState wrote: " + LoggingHelper().bundleBreakdown(savedState)
+            var message = "${f.javaClass.simpleName}.onSaveInstanceState wrote: ${savedState.bundleBreakdown()}"
             f.arguments?.let {
-                message += "\n* fragment arguments = " + LoggingHelper().bundleBreakdown(it)
+                message += "\n* fragment arguments = ${it.bundleBreakdown()}"
             }
             fragmentCallback.log(message)
         }
