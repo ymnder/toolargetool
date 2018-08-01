@@ -2,13 +2,14 @@ package com.gu.toolargetool;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 
 /**
  * {@link android.app.Application.ActivityLifecycleCallbacks} implementation that logs information
@@ -17,8 +18,10 @@ import java.util.Map;
 public class ActivitySavedStateLogger extends EmptyActivityLifecycleCallbacks {
 
     private final int priority;
-    @NonNull private final String tag;
-    @Nullable private final FragmentSavedStateLogger fragmentLogger;
+    @NonNull
+    private final String tag;
+    @Nullable
+    private final FragmentSavedStateLogger fragmentLogger;
     @NonNull private final Map<Activity, Bundle> savedStates = new HashMap<>();
 
     public ActivitySavedStateLogger(int priority, @NonNull String tag, boolean logFragments) {
