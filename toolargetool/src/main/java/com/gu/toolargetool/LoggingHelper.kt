@@ -2,35 +2,9 @@ package com.gu.toolargetool
 
 import android.os.Bundle
 import android.os.Parcel
-import android.os.Parcelable
-import android.util.Log
 import java.util.*
 
 class LoggingHelper {
-
-    /**
-     * Helper method to print the result of [.bundleBreakdown] to ADB.
-     *
-     *
-     * Logged at DEBUG priority.
-     *
-     * @param bundle to log the breakdown of
-     * @param tag to log with
-     */
-    fun logBundleBreakdown(tag: String, bundle: Bundle) {
-        Log.println(Log.DEBUG, tag, bundleBreakdown(bundle))
-    }
-
-    /**
-     * Helper method to print the result of [.bundleBreakdown] to ADB.
-     *
-     * @param bundle to log the breakdown of
-     * @param tag to log with
-     * @param priority to log with
-     */
-    fun logBundleBreakdown(tag: String, priority: Int, bundle: Bundle) {
-        Log.println(priority, tag, bundleBreakdown(bundle))
-    }
 
     /**
      * Return a formatted String containing a breakdown of the contents of a [Bundle].
@@ -87,7 +61,6 @@ class LoggingHelper {
         }
     }
 
-
     /**
      * Measure the size of a typed [Bundle] when written to a [Parcel].
      *
@@ -98,22 +71,6 @@ class LoggingHelper {
         val parcel = Parcel.obtain()
         try {
             parcel.writeBundle(bundle)
-            return parcel.dataSize()
-        } finally {
-            parcel.recycle()
-        }
-    }
-
-    /**
-     * Measure the size of a [Parcelable] when written to a [Parcel].
-     *
-     * @param parcelable to measure
-     * @return size in parcel in bytes
-     */
-    fun sizeAsParcel(parcelable: Parcelable): Int {
-        val parcel = Parcel.obtain()
-        try {
-            parcel.writeParcelable(parcelable, 0)
             return parcel.dataSize()
         } finally {
             parcel.recycle()
