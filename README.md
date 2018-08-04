@@ -6,6 +6,8 @@ A tool for debugging `TransactionTooLargeException` on Android.
 
 1. Include `toolargetool` as a dependency, you can remove it again once you've debugged your crash:
 
+       implementation "com.ymnd.android:toolargetool:1.0.0"
+
        implementation project(':toolargetool')
        testImplementation project(':toolargetool_op')
 
